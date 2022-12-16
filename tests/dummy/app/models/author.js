@@ -1,6 +1,6 @@
 import Contentful from 'ember-data-contentful/models/contentful';
-import attr from 'ember-data/attr';
+import { attr } from '@ember-data/model';
 
 export default Contentful.extend({
-  name: attr('string')
+  name: attr('string'),
 });

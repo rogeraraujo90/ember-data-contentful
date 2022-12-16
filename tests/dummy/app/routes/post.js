@@ -1,14 +1,16 @@
+import { inject as service } from '@ember/service';
 import Route from '@ember/routing/route';
-import { get } from '@ember/object';
 
-export default Route.extend({
+export default class extends Route {
+  @service store;
+
   model(params) {
     return this.store.queryRecord('post', {
-      'fields.slug': params.post_slug
+      'fields.slug': params.post_slug,
     });
-  },
+  }
 
   serialize(model) {
-    return { post_slug: get(model, 'slug') };
+    return { post_slug: model.slug };
   }
-});
+}

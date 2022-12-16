@@ -1,72 +1,61 @@
-import { test, moduleForModel } from 'ember-qunit';
+import { module, test } from 'qunit';
+import { setupTest } from 'ember-qunit';
 import ContentfulModel from 'ember-data-contentful/models/contentful';
 import ContentfulAdapter from 'ember-data-contentful/adapters/contentful';
-import { run } from '@ember/runloop';
-
-import attr from 'ember-data/attr';
+import { attr } from '@ember-data/model';
 
 let Post;
 
-moduleForModel('contentful', 'Unit | Adapter | contentful', {
-  beforeEach() {
+module('Unit | Adapter | contentful', function (hooks) {
+  setupTest(hooks);
 
+  hooks.beforeEach(function () {
     Post = ContentfulModel.extend({
       title: attr('string'),
     });
 
-    this.registry.register('model:post', Post);
-  }
-});
-
-test('queryRecord calls _getContent with correct parameters when query is empty', function(assert) {
-  let actualParams = null;
-  let done = assert.async();
-
-  let ApplicationAdapter = ContentfulAdapter.extend({
-    _getContent(type, params) {
-      actualParams = params;
-      this._super(...arguments);
-    }
+    this.owner.register('model:post', Post);
   });
 
-  this.registry.register('adapter:application', ApplicationAdapter);
+  test('queryRecord calls _getContent with correct parameters when query is empty', async function (assert) {
+    assert.expect(1);
 
-  return run(() => {
-    return this.store().queryRecord('post', { })
-    .then(() => {
-      assert.deepEqual(actualParams, {
-        content_type: 'post',
-        skip: 0,
-        limit: 1
-      });
-      done();
-    });
-  });
-});
+    let ApplicationAdapter = class extends ContentfulAdapter {
+      _getContent(type, params) {
+        assert.deepEqual(params, {
+          content_type: 'post',
+          skip: 0,
+          limit: 1,
+        });
+        return super._getContent(...arguments);
+      }
+    };
 
-test('queryRecord calls _getContent with correct parameters', function(assert) {
-  let actualParams = null;
-  let done = assert.async();
+    this.owner.register('adapter:application', ApplicationAdapter);
 
-  let ApplicationAdapter = ContentfulAdapter.extend({
-    _getContent(type, params) {
-      actualParams = params;
-      this._super(...arguments);
-    }
+    const store = this.owner.lookup('service:store');
+    await store.queryRecord('post', {});
   });
 
-  this.registry.register('adapter:application', ApplicationAdapter);
+  test('queryRecord calls _getContent with correct parameters', async function (assert) {
+    assert.expect(1);
 
-  return run(() => {
-    return this.store().queryRecord('post', { order: 'fields.title' })
-    .then(() => {
-      assert.deepEqual(actualParams, {
-        content_type: 'post',
-        order: 'fields.title',
-        skip: 0,
-        limit: 1
-      });
-      done();
-    });
+    let ApplicationAdapter = class extends ContentfulAdapter {
+      _getContent(type, params) {
+        assert.deepEqual(params, {
+          content_type: 'post',
+          order: 'fields.title',
+          skip: 0,
+          limit: 1,
+        });
+        return super._getContent(...arguments);
+      }
+    };
+
+    this.owner.register('adapter:application', ApplicationAdapter);
+
+    let store = this.owner.lookup('service:store');
+
+    await store.queryRecord('post', { order: 'fields.title' });
   });
 });

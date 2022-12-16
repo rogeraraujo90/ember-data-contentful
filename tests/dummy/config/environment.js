@@ -1,41 +1,39 @@
 'use strict';
 
-module.exports = function(environment) {
-  let ENV = {
+module.exports = function (environment) {
+  const ENV = {
     modulePrefix: 'dummy',
     environment,
     rootURL: '/',
-    locationType: 'auto',
+    locationType: 'history',
     contentful: {
       space: '10uc2hqlkgax',
-      accessToken: 'cc086951ba89c5a39204506474a75446d1b7a6d418d3190cc77fa96bd91e0d82',
-      previewAccessToken: '264e7e2fd47c6423ee45b54c0112a8a72d02de3d7a6e5cbb28ab0eee4da0673a',
-      usePreviewApi: false
+      accessToken:
+        'cc086951ba89c5a39204506474a75446d1b7a6d418d3190cc77fa96bd91e0d82',
+      previewAccessToken:
+        '264e7e2fd47c6423ee45b54c0112a8a72d02de3d7a6e5cbb28ab0eee4da0673a',
+      usePreviewApi: false,
     },
     metricsAdapters: [
       {
         name: 'GoogleAnalytics',
         environments: ['all'],
         config: {
-          id: 'UA-2516077-7'
-        }
-      }
+          id: 'UA-2516077-7',
+        },
+      },
     ],
     EmberENV: {
       FEATURES: {
         // Here you can enable experimental features on an ember canary build
-        // e.g. 'with-controller': true
+        // e.g. EMBER_NATIVE_DECORATOR_SUPPORT: true
       },
-      EXTEND_PROTOTYPES: {
-        // Prevent Ember Data from overriding Date.parse.
-        Date: false
-      }
     },
 
     APP: {
       // Here you can pass flags/options to your application instance
       // when it is created
-    }
+    },
   };
 
   if (environment === 'development') {
@@ -59,6 +57,8 @@ module.exports = function(environment) {
   }
 
   if (environment === 'production') {
+    ENV.locationType = 'hash';
+    ENV.rootURL = '/ember-data-contentful/';
     ENV.locationType = 'hash';
     ENV.rootURL = '/ember-data-contentful/';
   }

@@ -1,12 +1,14 @@
 import Contentful from 'ember-data-contentful/models/contentful';
-import attr from 'ember-data/attr';
-import { belongsTo, hasMany } from 'ember-data/relationships';
+import { attr } from '@ember-data/model';
+import { hasMany, belongsTo } from '@ember-data/model';
 
-export default Contentful.extend({
-  author: hasMany('author'),
-  body: attr('string'),
-  date: attr('date'),
-  featuredImage: belongsTo('contentful-asset'),
-  slug: attr('string'),
-  title: attr('string')
-});
+export default class PostModel extends Contentful {
+  @attr('string') body;
+  @attr('date') date;
+  @attr('string') slug;
+  @attr('string') title;
+
+  @belongsTo('contentful-asset') featuredImage;
+
+  @hasMany('author') author;
+}

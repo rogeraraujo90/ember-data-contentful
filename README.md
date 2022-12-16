@@ -3,16 +3,25 @@
 [![Ember Observer Score](http://emberobserver.com/badges/ember-data-contentful.svg)](http://emberobserver.com/addons/ember-data-contentful)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](http://makeapullrequest.com)
 [![FastBoot Ready](https://img.shields.io/badge/FastBoot-ready-brightgreen.svg)](http://ember-fastboot.com)
+
 # ember-data-contentful
 
 This is an Ember Data adapter/serializer that uses the **READ ONLY** Content Delivery API from [contentful](http://contentful.com)
 
-## Setup in your app
-```sh
+## Compatibility
+
+- Ember.js v3.28 or above
+- Ember CLI v3.28 or above
+- Node.js v14 or above
+
+## Installation
+
+```
 ember install ember-data-contentful
 ```
 
 After installing the addon, configure your Contentful Space ID and Access Token inside `ENV` in `config/environment.js`:
+
 ```js
 contentful: {
   space: 'YOUR-CONTENTFUL-SPACE',
@@ -26,11 +35,11 @@ contentful: {
 You can enable the Preview API for use in development in `config/environment.js`:
 
 ```js
-  if (environment === 'development') {
-    // ...
-    
-    ENV.contentful.usePreviewApi = true;
-  }
+if (environment === 'development') {
+  // ...
+
+  ENV.contentful.usePreviewApi = true;
+}
 ```
 
 ### Contentful models
@@ -49,9 +58,10 @@ export default Contentful.extend({
   date: attr('date'),
   featuredImage: belongsTo('contentful-asset'),
   slug: attr('string'),
-  title: attr('string')
+  title: attr('string'),
 });
 ```
+
 will give you the default fields of `contentType`, `createdAt`, and `updatedAt`.
 
 For multi-word model names, you can name your Contentful model IDs with dashes (ie. `timeline-post`) make sure the `contentType` field is inferred correctly.
@@ -81,12 +91,15 @@ If you are only using Contentful models, you can set these to `app/adapters/appl
 ## Usage
 
 Once you have configured your tokens and created your models, you can use the normal Ember Data requests of `findRecord`, `findAll`, `queryRecord`, and `query`. For example:
+
 ```js
 model() {
   return this.store.findAll('project');
 }
 ```
+
 or
+
 ```js
 model(params) {
   return this.store.findRecord('project', params.project_id);
@@ -94,6 +107,7 @@ model(params) {
 ```
 
 If you want to use pretty urls and the `slug` field in contentful, you can make your query like so:
+
 ```js
 model(params) {
   return this.store.queryRecord('page', {
@@ -104,7 +118,9 @@ serialize(model) {
   return { page_slug: get(model, 'slug') };
 }
 ```
+
 and ensure that you declare your route in `router.js` like this:
+
 ```js
 this.route('page', { path: ':page_slug' });
 ```
