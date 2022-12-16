@@ -19,6 +19,7 @@ testem.log
 .DS_Store
 
 /.vscode
+/.idea
 
 # ember-try
 .node_modules.ember-try/
