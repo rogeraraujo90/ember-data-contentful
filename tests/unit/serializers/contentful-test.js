@@ -12,17 +12,17 @@ module('Unit | Serializer | contentful', function (hooks) {
   setupTest(hooks);
 
   hooks.beforeEach(function () {
-    const ApplicationAdapter = ContentfulAdapter.extend({});
+    const ApplicationAdapter = class extends ContentfulAdapter {};
     this.owner.register('adapter:application', ApplicationAdapter);
 
-    const ApplicationSerializer = ContentfulSerializer.extend({});
+    const ApplicationSerializer = class extends ContentfulSerializer {};
     this.owner.register('serializer:application', ApplicationSerializer);
 
-    Post = ContentfulModel.extend({
-      title: attr('string'),
-      image: belongsTo('contentful-asset'),
-      location: attr(),
-    });
+    Post = class extends ContentfulModel {
+      @attr('string') title;
+      @belongsTo('contentful-asset', { async: false, inverse: null }) image;
+      @attr() location;
+    };
 
     this.owner.register('model:post', Post);
     post = {
@@ -378,9 +378,9 @@ module('Unit | Serializer | contentful', function (hooks) {
       ],
     };
 
-    Post = ContentfulModel.extend({
-      title: attr('string'),
-    });
+    Post = class extends ContentfulModel {
+      @attr('string') title;
+    };
 
     let serializer = this.owner.lookup('service:store').serializerFor('post');
 
@@ -557,9 +557,9 @@ module('Unit | Serializer | contentful', function (hooks) {
       ],
     };
 
-    Post = ContentfulModel.extend({
-      title: attr('string'),
-    });
+    Post = class extends ContentfulModel {
+      @attr('string') title;
+    };
 
     let serializer = this.owner.lookup('service:store').serializerFor('post');
 

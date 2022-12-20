@@ -1,8 +1,0 @@
-<h2 class='f2'>All Posts</h2>
-<ul>
-  {{#each @model as |post|}}
-    <li>
-      <LinkTo @route='post' @model={{post}}>{{post.title}}</LinkTo>
-    </li>
-  {{/each}}
-</ul>

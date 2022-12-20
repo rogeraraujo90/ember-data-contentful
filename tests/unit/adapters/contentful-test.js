@@ -10,9 +10,9 @@ module('Unit | Adapter | contentful', function (hooks) {
   setupTest(hooks);
 
   hooks.beforeEach(function () {
-    Post = ContentfulModel.extend({
-      title: attr('string'),
-    });
+    Post = class extends ContentfulModel {
+      @attr('string') title;
+    };
 
     this.owner.register('model:post', Post);
   });

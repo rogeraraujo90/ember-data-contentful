@@ -8,7 +8,6 @@ export default class PostModel extends Contentful {
   @attr('string') slug;
   @attr('string') title;
 
-  @belongsTo('contentful-asset') featuredImage;
-
+  @belongsTo('contentful-asset', { async: false, inverse: null }) featuredImage;
   @hasMany('author') author;
 }

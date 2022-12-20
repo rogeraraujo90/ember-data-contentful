@@ -52,14 +52,15 @@ import Contentful from 'ember-data-contentful/models/contentful';
 import attr from 'ember-data/attr';
 import { belongsTo, hasMany } from 'ember-data/relationships';
 
-export default Contentful.extend({
-  author: hasMany('author'),
-  body: attr('string'),
-  date: attr('date'),
-  featuredImage: belongsTo('contentful-asset'),
-  slug: attr('string'),
-  title: attr('string'),
-});
+export default class PostModel extends Contentful {
+  @attr('string') body;
+  @attr('date') date;
+  @attr('string') slug;
+  @attr('string') title;
+
+  @belongsTo('contentful-asset', { async: false, inverse: null }) featuredImage;
+  @hasMany('author') author;
+}
 ```
 
 will give you the default fields of `contentType`, `createdAt`, and `updatedAt`.
@@ -76,14 +77,14 @@ You will also need to define an adapter and serializer for your model, so that E
 // app/adapters/post.js
 import ContentfulAdapter from 'ember-data-contentful/adapters/contentful';
 
-export default ContentfulAdapter.extend({});
+export default class PostAdapter extends ContentfulAdapter {}
 ```
 
 ```js
 // app/serializers/post.js
 import ContentfulSerializer from 'ember-data-contentful/serializers/contentful';
 
-export default ContentfulSerializer.extend({});
+export default class PostSerializer extends ContentfulSerializer {}
 ```
 
 If you are only using Contentful models, you can set these to `app/adapters/application.js` and `app/serializers/application.js` to apply for all models.
@@ -113,7 +114,8 @@ model(params) {
   return this.store.queryRecord('page', {
     'fields.slug': params.page_slug
   });
-},
+}
+
 serialize(model) {
   return { page_slug: get(model, 'slug') };
 }
