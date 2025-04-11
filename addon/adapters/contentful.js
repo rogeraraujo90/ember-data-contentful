@@ -1,6 +1,5 @@
 import Adapter from '@ember-data/adapter';
 import config from 'ember-get-config';
-import fetch from 'fetch';
 
 export default class ContentfulAdapter extends Adapter {
   /**
